@@ -1,0 +1,9 @@
+*~
+*.log
+pkg/
+src/
+*.tar.*
+*.local
+*.png
+# Ignore directories under package root
+*/*/
