@@ -1,0 +1,49 @@
+# Maintainer: Sinkerine <i@15cm.net>
+# Previous Maintainer: Pieter Goetschalckx <3.14.e.ter <at> gmail <dot> com>
+
+_pkgname=webtorrent-desktop
+pkgname=${_pkgname}-git
+pkgver=v0.24.0.r191.ge8e93144
+pkgrel=1
+pkgdesc="Streaming torrent client."
+arch=('any')
+url="https://github.com/webtorrent/webtorrent-desktop"
+license=('MIT')
+depends=('electron' 'libnotify')
+makedepends=('git' 'npm')
+conflicts=('webtorrent-desktop' 'webtorrent-desktop-bin')
+options=(!strip)
+source=("git+$url.git"
+        "webtorrent-desktop.sh")
+sha256sums=('SKIP' 'c1a416dbaefa5da60d236af561d60b7ed86def1c3ee05b7090bc5586da72fb17')
+
+pkgver() {
+  cd webtorrent-desktop
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd "${_pkgname}"
+
+  sed -i '/"\(electron.*\|appdmg\)":/d' package.json
+  sed -i -e '/^Path=/d' -e "s#/opt/${_pkgname}/WebTorrent#/usr/bin/${_pkgname}#" static/linux/share/applications/${_pkgname}.desktop
+}
+
+build() {
+  cd "${_pkgname}"
+
+  npm install
+  npm run build
+  npm prune --production
+}
+
+package() {
+  cd "${_pkgname}"
+
+  install -dm755 "${pkgdir}/usr/lib/${_pkgname}"
+  cp -a build index.js node_modules package.json static "${pkgdir}/usr/lib/${_pkgname}/"
+  cp -a static/linux/share "${pkgdir}/usr/"
+
+  install -Dm755 "${srcdir}/${_pkgname}.sh" "${pkgdir}/usr/bin/${_pkgname}"
+  install -Dm644 "LICENSE" "${pkgdir}/usr/share/licenses/${_pkgname}/LICENSE"
+}

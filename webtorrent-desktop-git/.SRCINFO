@@ -1,0 +1,21 @@
+pkgbase = webtorrent-desktop-git
+	pkgdesc = Streaming torrent client.
+  pkgver=v0.24.0.r191.ge8e93144
+	pkgrel = 1
+	url = https://webtorrent.io/desktop
+	arch = any
+	license = MIT
+	makedepends = git
+	makedepends = npm
+	depends = electron
+	depends = libnotify
+	conflicts = webtorrent-desktop
+	conflicts = webtorrent-desktop-bin
+	options = !strip
+  source = https://github.com/webtorrent/webtorrent-desktop.git
+	source = webtorrent-desktop.sh
+	sha256sums = SKIP
+	sha256sums = c1a416dbaefa5da60d236af561d60b7ed86def1c3ee05b7090bc5586da72fb17
+
+pkgname = webtorrent-desktop-git
+
